@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Contador_de_letras.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Jogo_da_forca_palavra_secreta_ao_perder.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Letras_em_comum.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Letras_somente_em_uma_delas.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Localizar_letras.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Ordenando_numeros.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Teste_livre.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jogo_da_forca_indice.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jogo_da_forca_original.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jogo_da_velha.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jogo_forca_lista_boneco.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/operacoes.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/soma_arquivo.py" charset="UTF-8" />
+  </component>
+</project>
