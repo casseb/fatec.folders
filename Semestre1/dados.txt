@@ -1,0 +1,15 @@
+nome:<nome1>
+deveres:90.0,85.5,99.0,55.5
+quizzes:90.0,85.5,99.0
+testes:75.0,100.0
+#
+nome:<nome2>
+deveres:90.0,85.5,99.0,55.5
+quizzes:90.0,85.5,99.0
+testes:75.0,100.0
+#
+nome:<nome3>
+deveres:90.0,85.5,99.0,55.5
+quizzes:90.0,85.5,99.0
+testes:75.0,100.0
+#
