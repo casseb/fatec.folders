@@ -8,6 +8,12 @@ crescimento2):
     ''' Calcule quantos anos levará para a 'população1' ultrapassar a 
     'população2', baseado em suas porcentagens de crescimento.'''
 #    return anos
+    anos = 0
+    while(populacao1<populacao2):
+        anos = anos+1
+        populacao1 = populacao1*crescimento1
+        populacao2 = populacao2*crescimento2
+    return anos
 
 
 def quantidade_de_impares(valor_inicial,valor_final):
@@ -85,7 +91,7 @@ def test(obtido, esperado):
 
 def main():
     print('Aumento da população:')
-    test(crescimento_populacional(80000,200000,3,1.5), 63)
+    test(crescimento_populacional(8,20,3,1.5), 63)
     test(crescimento_populacional(1000,2000,1,1.1), 0)
     test(crescimento_populacional(2000,1000,1.1,1), 0)
     test(crescimento_populacional(2000,2020,1.1,1), 11)
