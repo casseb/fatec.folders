@@ -32,7 +32,6 @@ def converteStringDicionario(string,separadorLinha,separadorIndice,separadorCont
             resultado[conteudo[:conteudo.index(separadorIndice)]] = conteudoTotal
     return resultado
 
-
 #Montando Tabuleiro
 
 ##Criando string com coordenadas do tabuleiro
@@ -68,31 +67,7 @@ dicJogadas1 = converteStringDicionario(stringJogadas1,"\n",";","|")
 stringJogadas2 = stringJogador2[stringJogador2.index("T"):].rstrip()
 dicJogadas2 = converteStringDicionario(stringJogadas2,"\n",";","|")
 
-#Funções de Validação
-
-##Validando Quantidade de peças e de jogadas
-def validandoPecas(listaPecas,quantidade):
-    if(len(listaPecas)==quantidade):
-        return True
-    else:
-        return False
-
-def regraValidandoPecas(dicPosicoes):
-    valido = True
-    for pecas in dicPosicoes.keys():
-        if(pecas=='1' and not validandoPecas(dicPosicoes[pecas],2)):
-            valido=False
-        elif(pecas=='2' and not validandoPecas(dicPosicoes[pecas],2)):
-            valido=False
-        elif(pecas=='3' and not validandoPecas(dicPosicoes[pecas],5)):
-            valido=False
-        elif(pecas=='4' and not validandoPecas(dicPosicoes[pecas],4)):
-            valido=False
-        elif(pecas=='T' and not validandoPecas(dicPosicoes[pecas],20)):
-            valido=False
-    return valido
-
-##Validando sobreposição de pecas
+#Preenchendo Posições
 def preenchendoPosicoes(coordenada,tamanho):
     letra = coordenada[:1]
     inicio = int(coordenada[1:])
@@ -109,17 +84,6 @@ def convertMatrizEmLista(matriz):
         for itens in lista:
             listaCompleta.append(itens)
     return listaCompleta
-
-##Retorna True se tem repetido e False se não tem
-def listaTemRepetido(listaCompleta):
-    for itens in listaCompleta:
-        if(listaCompleta.count(itens)!=1):
-            return True
-    return False
-
-##Retorna false se tem peça sobrepondo e true se esta ok
-def regraValidandoSobreposicao(dicPosicoes):
-    return not listaTemRepetido(listaPosicoes(dicPosicoes))
 
 #Criando Dicionário Completo de Posições
 def criaDicionarioCompletoPosicoes(dicPosicoes,separarPorLista):
@@ -157,54 +121,27 @@ def criaDicionarioCompletoPosicoes(dicPosicoes,separarPorLista):
                 dicPosicoesCompleto[index] = convertMatrizEmLista(tempCoordenadas)
     return dicPosicoesCompleto
 
-def listaPosicoes(dicPosicoes):
-    listaPosicoes = []
-    for index in dicPosicoes.keys():
-        if(index=='1'):
-            for coordenada in dicPosicoes[index]:
-                listaPosicoes.append(preenchendoPosicoes(coordenada,4))
-        if(index=='2'):
-            for coordenada in dicPosicoes[index]:
-                listaPosicoes.append(preenchendoPosicoes(coordenada,5))
-        if(index=='3'):
-            for coordenada in dicPosicoes[index]:
-                listaPosicoes.append(preenchendoPosicoes(coordenada,1))
-        if(index=='4'):
-            for coordenada in dicPosicoes[index]:
-                listaPosicoes.append(preenchendoPosicoes(coordenada,2))
-    return (convertMatrizEmLista(listaPosicoes))
+##Validando Quantidade de peças e de jogadas
+def validandoQuantidade(listaPecas,quantidade):
+    if(len(listaPecas)==quantidade):
+        return True
+    else:
+        return False
 
-#Validando arquivos
-
-mensagensErro = []
-if not(regraValidandoPecas(dicPosicoes1)):
-    mensagensErro.append('Jogador 1 tem peças inválidas')
-if not(regraValidandoPecas(dicPosicoes2)):
-    mensagensErro.append('Jogador 2 tem peças inválidas')
-if not(regraValidandoPecas(dicJogadas1)):
-    mensagensErro.append('Jogador 1 tem jogadas inválidas')
-if not(regraValidandoPecas(dicJogadas2)):
-    mensagensErro.append('Jogador 2 tem jogadas inválidas')
-if not(regraValidandoSobreposicao(dicPosicoes1)):
-    mensagensErro.append('Jogador 1 tem peças sobrepostas')
-if not(regraValidandoSobreposicao(dicPosicoes2)):
-    mensagensErro.append('Jogador 2 tem peças sobrepostas')
-
-for mensagem in mensagensErro:
-    print(mensagem)
-
-
-#Inicio do processamento das jogadas
-if(len(mensagensErro)==0):
-    pontos = 0
-    #função que recebe um dicionario e retorna com as coordenadas completas
-    print(adicionaTamanhoCoordenadas(dicPosicoes1))
-
-
-
-
-
-
+def regraValidandoQuantidade(dicPosicoesTotal):
+    valido = True
+    for pecas in dicPosicoesTotal.keys():
+        if(pecas=='1' and not validandoQuantidade(dicPosicoesTotal[pecas],2)):
+            valido=False
+        elif(pecas=='2' and not validandoQuantidade(dicPosicoesTotal[pecas],2)):
+            valido=False
+        elif(pecas=='3' and not validandoQuantidade(dicPosicoesTotal[pecas],5)):
+            valido=False
+        elif(pecas=='4' and not validandoQuantidade(dicPosicoesTotal[pecas],4)):
+            valido=False
+        elif(pecas=='T' and not validandoQuantidade(dicPosicoesTotal[pecas],20)):
+            valido=False
+    return valido
 
 
 
