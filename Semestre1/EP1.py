@@ -1,6 +1,6 @@
-###########################Funções diversas########################
+###########################FunÃ§Ãµes diversas########################
 
-#Função que recebe uma string qualquer e retorna a propria string se for texto, int se for numeros e float se for numeros com ponto
+#FunÃ§Ã£o que recebe uma string qualquer e retorna a propria string se for texto, int se for numeros e float se for numeros com ponto
 def convertStringParaNumero(palavra):
     if(palavra.count('.')==1):
         parte1 = palavra[:palavra.find('.')]
@@ -17,7 +17,7 @@ def convertStringParaNumero(palavra):
     else:
         return palavra
 
-#Função que pega String e converte em um dicionario
+#FunÃ§Ã£o que pega String e converte em um dicionario
 def converteStringDicionario(string,separadorLinha,separadorIndice,separadorConteudo):
     resultado = {}
     linha = string.rstrip().split(separadorLinha)
@@ -32,7 +32,7 @@ def converteStringDicionario(string,separadorLinha,separadorIndice,separadorCont
             resultado[conteudo[:conteudo.index(separadorIndice)]] = conteudoTotal
     return resultado
 
-#Preenchendo Posições das coordenadas
+#Preenchendo PosiÃ§Ãµes das coordenadas
 def preenchendoPosicoes(coordenada,tamanho):
     letra = coordenada[:1]
     inicio = int(coordenada[1:])
@@ -57,14 +57,14 @@ def validandoQuantidade(lista,quantidade):
     else:
         return False
 
-##Retorna True se tem repetido e False se não tem
+##Retorna True se tem repetido e False se nÃ£o tem
 def listaTemRepetido(lista):
     for itens in lista:
         if(lista.count(itens)!=1):
             return True
     return False
 
-#Converte o conteúdo de um dicionário em uma única lista
+#Converte o conteÃºdo de um dicionÃ¡rio em uma Ãºnica lista
 def converteConteudoDicEmLista(dic):
     lista = []
     for index in dic:
@@ -72,7 +72,7 @@ def converteConteudoDicEmLista(dic):
             lista.append(conteudo)
     return lista
 
-#Procura se o item tem no dicionário, se tiver retorna True se não False
+#Procura se o item tem no dicionÃ¡rio, se tiver retorna True se nÃ£o False
 def temNaDic(dic,item):
     tem = False
     for index in dic.keys():
@@ -81,11 +81,27 @@ def temNaDic(dic,item):
                 return True
     return tem
 
+#Subtrai o conteudo de um dicionÃ¡rio com uma matriz, trazendo um dicionÃ¡rio subtraido com resultado
+def subtraiDicionario(dic,lista):
+    dicResultado = {}
+    for index in dic:
+        dicResultado[index]=[]
+        for matriz in dic[index]:
+            dicResultado[index].append("-")
+            for conteudo in matriz:
+                if(conteudo not in lista):
+                    dicResultado[index].append(conteudo)
+                else:
+                    dicResultado[index].append('X')
+    return dicResultado
 
-######################################Regra de negócio###########################
 
 
-#Criando Dicionário Completo de Posições
+
+######################################Regra de negÃ³cio###########################
+
+
+#Criando DicionÃ¡rio Completo de PosiÃ§Ãµes
 def criaDicionarioCompletoPosicoes(dicPosicoes,separarPorLista):
     dicPosicoesCompleto = {}
     for index in dicPosicoes.keys():
@@ -121,7 +137,7 @@ def criaDicionarioCompletoPosicoes(dicPosicoes,separarPorLista):
                 dicPosicoesCompleto[index] = convertMatrizEmLista(tempCoordenadas)
     return dicPosicoesCompleto
 
-#Validando quantidade de peças e torpedos
+#Validando quantidade de peÃ§as e torpedos
 
 def regraValidandoQuantidade(dicPosicoesTotal):
     valido = True
@@ -138,14 +154,14 @@ def regraValidandoQuantidade(dicPosicoesTotal):
             valido=False
     return valido
 
-##Retorna false se tem peça sobrepondo e true se esta ok
+##Retorna false se tem peÃ§a sobrepondo e true se esta ok
 def regraValidandoSobreposicaoP(dicPosicoes):
     return not listaTemRepetido(converteConteudoDicEmLista(criaDicionarioCompletoPosicoes(dicPosicoes,False)))
 
 def regraValidandoSobreposicaoT(dicJogadas):
     return not listaTemRepetido(converteConteudoDicEmLista(dicJogadas))
 
-#Validando se as peças estão dentro do tabuleiro
+#Validando se as peÃ§as estÃ£o dentro do tabuleiro
 def regraValidandoPosicoes(dicPosicoesTotal, dicTabuleiro):
     valido = True
     for index in dicPosicoesTotal.keys():
@@ -154,7 +170,33 @@ def regraValidandoPosicoes(dicPosicoesTotal, dicTabuleiro):
                 return False
     return valido
 
-#####################################Criando Dicionários#################################
+#Somando pontos individuais
+def somandoPontosIndividuais(dic):
+    count = 0
+    for index in dic:
+        for matriz in dic[index]:
+            for conteudo in matriz:
+                if(conteudo=='X'):
+                    count = count+1
+    return count
+
+#Somando pontos barcos afundados
+def somandoPontosAfundados(dic):
+    count = 0
+    reseta = False
+    for index in dic:
+        for conteudo in dic[index]:
+            if(conteudo=="-"):
+                count = count+1
+                reseta = True
+            elif(conteudo!="X"):
+                if(reseta):
+                    count = count-1
+                    reseta = False
+    return count
+
+
+#####################################Criando DicionÃ¡rios#################################
 
 #Montando Tabuleiro
 
@@ -179,7 +221,7 @@ stringJogador2 = arquivoJogador2.read()
 arquivoJogador1.close()
 arquivoJogador2.close()
 
-#Criando dicionario com as posições
+#Criando dicionario com as posiÃ§Ãµes
 stringPosicoes1 = stringJogador1[:stringJogador1.index("# Jogada")].rstrip()
 dicPosicoes1 = converteStringDicionario(stringPosicoes1,"\n",";","|")
 stringPosicoes2 = stringJogador2[:stringJogador2.index("# Jogada")].rstrip()
@@ -195,27 +237,27 @@ dicJogadas2 = converteStringDicionario(stringJogadas2,"\n",";","|")
 
 mensagensErro = []
 if not(regraValidandoQuantidade(dicPosicoes1)):
-    mensagensErro.append('Jogador 1 tem peças com quantidade incorreta')
+    mensagensErro.append('Jogador 1 tem peÃ§as com quantidade incorreta')
 if not(regraValidandoQuantidade(dicPosicoes2)):
-    mensagensErro.append('Jogador 2 tem peças com quantidade incorreta')
+    mensagensErro.append('Jogador 2 tem peÃ§as com quantidade incorreta')
 if not(regraValidandoQuantidade(dicJogadas1)):
     mensagensErro.append('Jogador 1 tem jogadas com quantidade incorreta')
 if not(regraValidandoQuantidade(dicJogadas2)):
     mensagensErro.append('Jogador 2 tem jogadas com quantidade incorreta')
 
 if not (regraValidandoPosicoes(criaDicionarioCompletoPosicoes(dicPosicoes1,False),dicTabuleiro)):
-    mensagensErro.append('Jogador 1 tem peças Fora do Tabuleiro ou inválidas')
+    mensagensErro.append('Jogador 1 tem peÃ§as Fora do Tabuleiro ou invÃ¡lidas')
 if not (regraValidandoPosicoes(criaDicionarioCompletoPosicoes(dicPosicoes2,False),dicTabuleiro)):
-    mensagensErro.append('Jogador 2 tem peças Fora do Tabuleiro ou inválidas')
+    mensagensErro.append('Jogador 2 tem peÃ§as Fora do Tabuleiro ou invÃ¡lidas')
 if not (regraValidandoPosicoes(dicJogadas1,dicTabuleiro)):
-    mensagensErro.append('Jogador 1 tem torpedos Fora do Tabuleiro ou inválidas')
+    mensagensErro.append('Jogador 1 tem torpedos Fora do Tabuleiro ou invÃ¡lidas')
 if not (regraValidandoPosicoes(dicJogadas2,dicTabuleiro)):
-    mensagensErro.append('Jogador 2 tem torpedos Fora do Tabuleiro ou inválidas')
+    mensagensErro.append('Jogador 2 tem torpedos Fora do Tabuleiro ou invÃ¡lidas')
 
 if not(regraValidandoSobreposicaoP(dicPosicoes1)):
-    mensagensErro.append('Jogador 1 tem peças sobrepostas')
+    mensagensErro.append('Jogador 1 tem peÃ§as sobrepostas')
 if not(regraValidandoSobreposicaoP(dicPosicoes2)):
-    mensagensErro.append('Jogador 2 tem peças sobrepostas')
+    mensagensErro.append('Jogador 2 tem peÃ§as sobrepostas')
 if not(regraValidandoSobreposicaoT(dicJogadas1)):
     mensagensErro.append('Jogador 1 tem Torpedos Repetidos')
 if not(regraValidandoSobreposicaoT(dicJogadas2)):
@@ -225,10 +267,46 @@ if not(regraValidandoSobreposicaoT(dicJogadas2)):
 for mensagem in mensagensErro:
     print(mensagem)
 
-################################Jogadas##########################
+################################Processando Jogadas e imprimindo##########################
+if(len(mensagensErro)==0):
+    dicPosicaoFinal1 = subtraiDicionario(criaDicionarioCompletoPosicoes(dicPosicoes1,True),converteConteudoDicEmLista(dicJogadas2))
+    dicPosicaoFinal2 = subtraiDicionario(criaDicionarioCompletoPosicoes(dicPosicoes2,True),converteConteudoDicEmLista(dicJogadas1))
+    pontosJogador1 = somandoPontosAfundados(dicPosicaoFinal2) + somandoPontosIndividuais(dicPosicaoFinal2)
+    pontosJogador2 = somandoPontosAfundados(dicPosicaoFinal1) + somandoPontosIndividuais(dicPosicaoFinal1)
 
+    msg1 = "Bem Vindo ao Batalha Naval By Casseb"
+    msg2 = "Abaixo o resultado de seu jogo:"
+    separador = "--------------------"
+    msg3 = "Ranking:"
 
+    saidas = [msg1,msg2,separador,msg3]
 
+    if(pontosJogador1>pontosJogador2):
+        saidas.append("1Âº Colocado: Jogador 1")
+        saidas.append("2Âº Colocado: Jogador 2")
+    elif(pontosJogador1<pontosJogador2):
+        saidas.append("1Âº Colocado: Jogador 2")
+        saidas.append("2Âº Colocado: Jogador 1")
+    else:
+        saidas.append("Jogo Empatado!!!")
 
+    saidas.append(separador)
 
+    saidas.append("EstatÃ­sticas Jogador 1")
+    saidas.append("Quantidade total de pontos: %i"%(pontosJogador1))
+    saidas.append("Alvos Acertados Parcial: %i"%(somandoPontosIndividuais(dicPosicaoFinal2)))
+    saidas.append("Alvos Acertados Total: %i"%(somandoPontosAfundados(dicPosicaoFinal2)))
+    saidas.append("Alvos Parciais que restaram do AdversÃ¡rio: %i"%(31-somandoPontosIndividuais(dicPosicaoFinal2)))
+    saidas.append("Alvos Totais que restaram do AdversÃ¡rio: %i"%(13-somandoPontosAfundados(dicPosicaoFinal2)))
 
+    saidas.append(separador)
+
+    saidas.append("EstatÃ­sticas Jogador 2")
+    saidas.append("Quantidade total de pontos: %i"%(pontosJogador2))
+    saidas.append("Alvos Acertados Parcial: %i"%(somandoPontosIndividuais(dicPosicaoFinal1)))
+    saidas.append("Alvos Acertados Total: %i"%(somandoPontosAfundados(dicPosicaoFinal1)))
+    saidas.append("Alvos Parciais que restaram do AdversÃ¡rio: %i"%(31-somandoPontosIndividuais(dicPosicaoFinal1)))
+    saidas.append("Alvos Totais que restaram do AdversÃ¡rio: %i"%(13-somandoPontosAfundados(dicPosicaoFinal1)))
+
+    for saida in saidas:
+        print(saida)
