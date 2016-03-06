@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
-/* Biblioteca ByCasseb Versão 0.11 */
+/* Biblioteca ByCasseb Versão 0.7 */
 
 /*Legenda:
 imp = Retorna impressão na tela
@@ -197,21 +197,10 @@ int** capturaMatriz(char enunciado[50],int quantLinhas,int quantColunas){
         printf("%i\n",i+1);
         for(j=0;j<quantColunas;j++){
             scanf("%i",&numeros[i][j]);
-            getchar();
         }
     }
     return numeros;
 }
-
-char* capturaPalavra(char enunciado[50]){
-    setlocale(LC_ALL, "Portuguese");
-    printf(enunciado);
-    char *palavra;
-    fflush(stdin);
-    gets(palavra);
-    return palavra;
-}
-
 
 /* Calculos */
 
@@ -279,67 +268,10 @@ void multiplicacao(){
     system("pause");
 }
 
-void somaMatrizes(int** matrizOriginal1,int** matrizOriginal2,int quantLinhas,int quantColunas){
-    int i,j;
-    int** somaMatriz;
-    somaMatriz = (int *)malloc(quantLinhas * sizeof(int));
-    for (i=0;i<quantLinhas;i++ ){
-        *(somaMatriz + i) = (char*)malloc(quantLinhas*sizeof(char));
-    }
-    for(i=0;i<quantLinhas;i++){
-        for(j=0;j<quantColunas;j++){
-            somaMatriz[i][j] = matrizOriginal1[i][j]+matrizOriginal2[i][j];
-        }
-    }
-    impMatrizInt(somaMatriz,quantLinhas,quantColunas);
-}
-
-void subtraiMatrizes(int** matrizOriginal1,int** matrizOriginal2,int quantLinhas,int quantColunas){
-    int i,j;
-    int** diferencaMatriz;
-    diferencaMatriz = (int *)malloc(quantLinhas * sizeof(int));
-    for (i=0;i<quantLinhas;i++ ){
-        *(diferencaMatriz + i) = (char*)malloc(quantLinhas*sizeof(char));
-    }
-    for(i=0;i<quantLinhas;i++){
-        for(j=0;j<quantColunas;j++){
-            diferencaMatriz[i][j] = matrizOriginal1[i][j]-matrizOriginal2[i][j];
-        }
-    }
-    impMatrizInt(diferencaMatriz,quantLinhas,quantColunas);
-}
-
-
 
 /* Especiais */
 
 typedef void (*Opcoes)();
-
-void espMenu2Opcoes(char opcao1[50],Opcoes funcOpcao1,char opcao2[50],Opcoes funcOpcao2){
-    setlocale(LC_ALL, "Portuguese");
-    char opcao;
-    do{
-        system("cls");
-        printf("Menu de opcoes \n------------------- \n \n");
-        printf("(a)-%s , (b)-%s, (c)-Sair\n",opcao1,opcao2);
-        scanf("%c",&opcao);
-        getchar();
-        switch(opcao){
-            case('a'):
-                funcOpcao1();
-                break;
-            case('b'):
-                funcOpcao2();
-                break;
-            case('c'):
-                break;
-            default:
-                printf("Opcao inválida \n");
-                system("pause");
-                break;
-        }
-    }while(opcao!='c');
-}
 
 void espMenu3Opcoes(char opcao1[50],Opcoes funcOpcao1,char opcao2[50],Opcoes funcOpcao2,char opcao3[50],Opcoes funcOpcao3){
     setlocale(LC_ALL, "Portuguese");
@@ -368,38 +300,6 @@ void espMenu3Opcoes(char opcao1[50],Opcoes funcOpcao1,char opcao2[50],Opcoes fun
                 break;
         }
     }while(opcao!='d');
-}
-
-void espMenu4Opcoes(char opcao1[50],Opcoes funcOpcao1,char opcao2[50],Opcoes funcOpcao2,char opcao3[50],Opcoes funcOpcao3,char opcao4[50],Opcoes funcOpcao4){
-    setlocale(LC_ALL, "Portuguese");
-    char opcao;
-    do{
-        system("cls");
-        printf("Menu de opcoes \n------------------- \n \n");
-        printf("(a)-%s , (b)-%s, (c)-%s, (d)-%s, (e)-Sair\n",opcao1,opcao2,opcao3,opcao4);
-        scanf("%c",&opcao);
-        getchar();
-        switch(opcao){
-            case('a'):
-                funcOpcao1();
-                break;
-            case('b'):
-                funcOpcao2();
-                break;
-            case('c'):
-                funcOpcao3();
-                break;
-            case('d'):
-                funcOpcao4();
-                break;
-            case('e'):
-                break;
-            default:
-                printf("Opcao inválida \n");
-                system("pause");
-                break;
-        }
-    }while(opcao!='e');
 }
 
 /* Regras de negócio */

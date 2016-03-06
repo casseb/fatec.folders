@@ -8,6 +8,7 @@
 imp = Retorna impressão na tela
 captura = Preenche variavel com conteúdo do usuário
 calc = Calcula e retorna o resultado do cálculo
+str = Manipulação de strings
 esp = Casos especiais
 regra = Regra de negócio, usado somente em 1 programa
 
@@ -152,6 +153,15 @@ void impDiaDaSemana(int dia, int mes, int ano){
     system("pause");
 }
 
+void impListaPalavras(char** nomes,int quantNomes){
+    int i;
+    printf("\n");
+    for(i=0;i<quantNomes;i++){
+        puts(nomes[i]);
+    }
+    printf("\n");
+    system("pause");
+}
 
 /* Capturando variáveis do usuário */
 
@@ -210,6 +220,21 @@ char* capturaPalavra(char enunciado[50]){
     fflush(stdin);
     gets(palavra);
     return palavra;
+}
+
+char** capturaVetorPalavras(char enunciado[50],int quantPalavras){
+    setlocale(LC_ALL, "Portuguese");
+    printf(enunciado);
+    char** nomes = (char **)malloc(quantPalavras * sizeof(int));
+    int i;
+    for (i=0;i<quantPalavras;i++ ){
+        *(nomes + i) = (char*)malloc(50*sizeof(char));
+    }
+    for(i=0;i<quantPalavras;i++){
+        fflush(stdin);
+        gets(nomes[i]);
+    }
+    return nomes;
 }
 
 
@@ -309,7 +334,36 @@ void subtraiMatrizes(int** matrizOriginal1,int** matrizOriginal2,int quantLinhas
     impMatrizInt(diferencaMatriz,quantLinhas,quantColunas);
 }
 
+/* Manipulação de strings */
 
+char** ordemAlfabetica(char** nomes,int quantNomes){
+    int i,j;
+    char aux[30];
+    for(i=0;i<quantNomes;i++){
+        for(j=0;j<quantNomes;j++){
+            if(strcmp(nomes[i],nomes[j])==-1){
+                strcpy(aux,nomes[j]);
+                strcpy(nomes[j],nomes[i]);
+                strcpy(nomes[i],aux);
+            }
+        }
+    }
+    return nomes;
+}
+
+char** maiuscula(char** nomes,int quantNomes){
+    int i,j;
+    char **nomesMaiusculo = (char **)malloc(quantNomes * sizeof(char));
+    for (i=0;i<quantNomes;i++ ){
+        *(nomesMaiusculo + i) = (char*)malloc(30*sizeof(char));
+    }
+    for(i=0;i<quantNomes;i++){
+        for(j=0;j<=strlen(nomes[i]);j++){
+            nomesMaiusculo[i][j] = toupper(nomes[i][j]);
+        }
+    }
+    return nomesMaiusculo;
+}
 
 /* Especiais */
 

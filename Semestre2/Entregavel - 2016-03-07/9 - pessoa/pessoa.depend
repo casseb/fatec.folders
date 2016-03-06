@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1456705001 source:e:\fatec\linguagem de programação\pessoa\main.c
+	<stdio.h>
+	<stdlib.h>
+
