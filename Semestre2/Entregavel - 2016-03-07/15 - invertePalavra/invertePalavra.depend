@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1456883277 source:e:\fatec\linguagem de programação\invertepalavra\main.c
+	<stdio.h>
+	<stdlib.h>
+

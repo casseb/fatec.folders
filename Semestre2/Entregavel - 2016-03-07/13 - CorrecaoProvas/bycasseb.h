@@ -365,17 +365,6 @@ char** maiuscula(char** nomes,int quantNomes){
     return nomesMaiusculo;
 }
 
-char eVogal(char letra){
-    int i;
-    char vogais[5] = "aeiou";
-    for(i=0;i<5;i++){
-        if(letra==vogais[i]){
-            return 'V';
-        }
-    }
-    return 'F';
-}
-
 /* Especiais */
 
 typedef void (*Opcoes)();
