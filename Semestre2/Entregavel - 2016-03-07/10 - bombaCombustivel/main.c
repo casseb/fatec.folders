@@ -99,5 +99,5 @@ opcaoD(){
 
 main()
 {
-    espMenu4Opcoes("Abastecer",opcaoA,"Alterar Valor",opcaoB,"Alterar Combustível",opcaoC,"Alterar quantidade do conbustível",opcaoD);
+    espMenu4Opcoes("Abastecer",opcaoA,"Alterar Valor",opcaoB,"Alterar Tipo Combustível",opcaoC,"Alterar quantidade do conbustível",opcaoD);
 }
