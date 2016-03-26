@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1458958121 source:e:\fatec\repositorio\fatec\semestre2\entragavel - 2016-03-27\programa4\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bycasseb.h"
+
+1458864069 e:\fatec\repositorio\fatec\semestre2\entragavel - 2016-03-27\programa4\bycasseb.h
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+
