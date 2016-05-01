@@ -28,10 +28,10 @@ void imprimirCirculo(){
             if(j==(c1.raio)&&i==0){
                 printf("-");
 
-            }else if(j==esq||j==dir){
+            }else if((j==esq||j==dir)){
                 printf("-");
             }else{
-                printf("|");
+                printf(" ");
             }
         }
         esq--;
@@ -44,13 +44,13 @@ void imprimirCirculo(){
         esq++;
         dir--;
         for(j=0;j<((c1.raio)*2)+1;j++){
-            if(j==(c1.raio)&&i==c1.raio+1){
+            if(j==(c1.raio)&&i==c1.raio-1){
                 printf("-");
 
             }else if(j==esq||j==dir){
                 printf("-");
             }else{
-                printf("|");
+                printf(" ");
             }
         }
         printf("\n");

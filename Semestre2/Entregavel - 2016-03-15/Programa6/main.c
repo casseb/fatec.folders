@@ -11,3 +11,9 @@ void main()
     char* diaDaSemana = impDiaDaSemana(dia,mes,ano);
     puts(diaDaSemana);
 }
+
+int inteiro;
+float decimal;
+int vInt[10], vInt2[] = {2,4};
+char c = 'a';
+char string[10];
