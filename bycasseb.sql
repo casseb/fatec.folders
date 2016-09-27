@@ -92,6 +92,13 @@ Begin
 END;
 /
 PRINT g_sal_anual
+
+Set Serveroutput On
+Begin
+  For i In REVERSE 1..10 Loop
+    DBMS_output.put_line('i: ' || i);
+  END LOOP;
+END;
 ----------------------Sequence------------------------------------------------
 
 create sequence dep_id_seq
@@ -374,6 +381,19 @@ cpa_compra.cpa_data_hora > TO_DATE('01/02/2016','DD/MM/YYYY');
 
 ---------------------Prática 4----------------------------------------------
 
+
+DECLARE
+  V_FUN_COD NUMBER(4);
+  V_FUN_NOME VARCHAR2(30);
+
+Begin
+  SELECT FUN_COD, fun_nome
+  INTO V_FUN_COD, V_FUN_NOME
+  FROM Funcionario
+  WHERE FUN_COD = 1;
+  DBMS_output.put_line(V_FUN_NOME);
+END;
+
 DECLARE
   V_FUN_COD NUMBER(4);
   V_FUN_NOME VARCHAR2(30);
@@ -387,20 +407,29 @@ Begin
 END;
   /
 
+--------------------------Bloco em desuso----------------------------------
+
+
+
+
 
 */
+
+
 ---------------------------------Execute aqui-------------------------------
-
 DECLARE
-  V_FUN_COD NUMBER(4);
-  V_FUN_NOME VARCHAR2(30);
 
-Begin
-  SELECT FUN_COD, fun_nome
-  INTO V_FUN_COD, V_FUN_NOME
-  FROM Funcionario
-  WHERE FUN_COD = 1;
-  DBMS_output.put_line(V_FUN_NOME);
+v_CTA_NOME cta_conta.cta_nome%type := 'BATMAN';
+v_CTA_SENHA cta_conta.cta_senha%type := 'BecauseIambatman';
+v_cta_data_expiracao cta_conta.cta_data_expiracao%type := ('2016-05-17', 'YYYY-MM-DD');
+
+BEGIN
+
+insert into
+cta_conta
+(CTA_NOME,CTA_SENHA,CTA_DATA_EXPIRACAO) values
+(v_CTA_NOME, v_CTA_SENHA, v_cta_data_expiracao);
+
 END;
 
 -----------------Final de arquivo e Commit implícito-------------------------
