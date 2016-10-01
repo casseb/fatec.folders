@@ -1,5 +1,5 @@
 ----------------Comandos de inicialização-------------------------------
-connect venda/123
+connect USER_PRATICA05/aluno
 clear scr
 /*
 ----------------Preparando Banco-----------------------------------------
@@ -407,6 +407,79 @@ Begin
 END;
   /
 
+  DECLARE
+
+  v_est_cod estado.est_cod%type := 44
+  v_est_estado estado.est_estado%type := 'XX';
+
+  BEGIN
+
+  insert into
+  estado
+  (est_cod,est_estado) values
+  (v_est_cod, v_est_estado);
+
+  END;
+
+  /
+
+  DECLARE
+
+  v_est_estado estado.est_estado%type := 'EX';
+
+  BEGIN
+
+  update
+  estado
+  set est_estado = v_est_estado
+  where est_estado = 'XX';
+
+  END;
+
+  /
+
+  DECLARE
+
+  v_est_estado estado.est_estado%type := 'EX';
+
+  BEGIN
+
+  delete from
+  estado
+  where est_estado = v_est_estado;
+
+  END;
+
+  /
+
+  DECLARE
+
+  v_est_cod estado.est_cod%type := 44;
+  v_est_estado estado.est_estado%type := 'XX';
+
+  BEGIN
+
+  insert into
+  estado
+  (est_cod,est_estado) values
+  (v_est_cod, v_est_estado);
+  commit;
+
+  delete from
+  estado
+  where est_estado = v_est_estado;
+  rollback;
+  END;
+
+  select i.exe_cod,e.exe_descricao
+  from  item_emprestimo i join exemplar e on
+  i.exe_cod=e.exe_cod
+  where i.emp_cod = 1;
+
+  select l.liv_titulo, count(*) Quantidade from
+  livro l join exemplar e on l.liv_cod = e.liv_cod
+  group by l.liv_titulo;
+
 --------------------------Bloco em desuso----------------------------------
 
 
@@ -417,20 +490,19 @@ END;
 
 
 ---------------------------------Execute aqui-------------------------------
-DECLARE
 
-v_CTA_NOME cta_conta.cta_nome%type := 'BATMAN';
-v_CTA_SENHA cta_conta.cta_senha%type := 'BecauseIambatman';
-v_cta_data_expiracao cta_conta.cta_data_expiracao%type := ('2016-05-17', 'YYYY-MM-DD');
+select p.pes_nome, prof.titulacao, t.tel_numero from
+pessoa p join
 
-BEGIN
 
-insert into
-cta_conta
-(CTA_NOME,CTA_SENHA,CTA_DATA_EXPIRACAO) values
-(v_CTA_NOME, v_CTA_SENHA, v_cta_data_expiracao);
 
-END;
+
+
+
+
+
+
+
 
 -----------------Final de arquivo e Commit implícito-------------------------
 /
