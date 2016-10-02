@@ -480,6 +480,39 @@ END;
   livro l join exemplar e on l.liv_cod = e.liv_cod
   group by l.liv_titulo;
 
+  select p.pes_nome, prof.titulacao, t.tel_numero from
+  pessoa p join Professor prof on p.pes_cod = prof.pes_cod
+  left join Telefone t on t.pes_cod = p.pes_cod;
+
+
+  select p.pes_nome, prof.titulacao, t.tel_numero from
+  Pessoa p, Professor prof, Telefone t
+  where
+  p.pes_cod = prof.pes_cod and
+  p.pes_cod(+) = t.pes_cod;
+
+  select pes_nome from (
+  select p.pes_nome, count(*) quantidade from
+  Pessoa p join emprestimo e on p.pes_cod = e.pes_cod
+  group by p.pes_nome
+  )
+  where rownum = 1
+  order by quantidade;
+
+  select distinct p.pes_nome from
+  Pessoa p join Emprestimo e on p.pes_cod = e.pes_cod
+  join Devolucao d on e.emp_cod = d.emp_cod
+  where d.data_dev > e.emp_data_prevdev;
+
+  create or replace view view_emprestimo as (
+    select i.exe_cod from
+    emprestimo e join item_emprestimo i on e.emp_cod = i.emp_cod
+    where e.pes_cod = 1
+  );
+
+  select max(edi_cod)+1 from editora;
+
+  create sequence edi_cod start with 3;
 --------------------------Bloco em desuso----------------------------------
 
 
@@ -490,15 +523,18 @@ END;
 
 
 ---------------------------------Execute aqui-------------------------------
-
-select p.pes_nome, prof.titulacao, t.tel_numero from
-pessoa p join
-
-
-
-
-
-
+SET SERVEROUTPUT ON
+ACCEPT p_liv_codigo PROMPT 'Digite o código do livro: '
+Declare
+v_liv_codigo livro.liv_cod%type := &p_liv_codigo;
+v_quant number;
+Begin
+  select count(*)
+    into v_quant
+    from exemplar
+    where liv_cod = v_liv_codigo;
+    DBMS_output.put_line('Quantidade de exemplares: ' || v_quant);
+End;
 
 
 

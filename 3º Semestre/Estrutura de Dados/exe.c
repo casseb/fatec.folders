@@ -1,55 +1,80 @@
 #include <stdio.h>
 
-int *Distancias (int **A, int n, int o) {
-	int *d, x, y;
-	int *f, s, t;
-	d = malloc (n * sizeof (int));
-	for (x = 0; x < n; x++) d[x] = -1;
-		d[o] = 0;
-		f = malloc (n * sizeof (int));
-		s = 0; t = 1; f[s] = o; /* o entra na fila */
-	while (s < t) {
-		x = f[s++]; /* x sai da fila */
-		for (y = 0; y < n; y++)
-			if (A[x][y] == 1 && d[y] == -1) {
-				d[y] = d[x] + 1;
-				f[t++] = y; /* y entra na fila */
-			}
+typedef struct cel{
+	int cont;
+	struct cel *seg;
+}Celula;
+
+int empilha(Celula *t, int x){
+	if(t->seg == NULL || t->seg>=x ){
+		add(t,x);
+		return 1;
+	}else{
+		return 0;
 	}
-	free (f);
-	return d;
 }
 
-
-
-int main(){
-	
-	int n = 4;
-	int A[n][n];
-	int *Matriz;
-	Matriz = &A;
-	int i,j;
-	for(i=0;i<=n;i++){
-		for(j=0;j<=n;j++){
-			A[i][j] = 0;
+void transfere(Celula *to, Celula *td){
+	if(to->seg == NULL){
+		printf("\nPilha origem vazia");
+	}else if(td->seg == NULL){
+		empilha(td,remover(to));
+	}else{
+		if(td->seg->cont>=to->seg->cont){
+			empilha(td,remover(to));
+		}else{
+			printf("\nMovimento invalido");
 		}
 	}
+}
+
+void add(Celula *t, int x){
+	Celula *novo = malloc(sizeof(Celula));
+	novo->cont = x;
+	novo->seg = t->seg;
+	t->seg = novo;
+}
+
+int remover(Celula *t){
+	Celula *lixo = t->seg;
+	int x = lixo->cont;
+	t->seg = lixo->seg;
+	free(lixo);
+	return x;
+}
+
+void imprimir(Celula *t){
+	t = t->seg;
+	while(t!=NULL){
+		printf("\n%i",t->cont);
+		t = t->seg;
+	}
+}
+
+int main(){
+	Celula *p1 = malloc(sizeof(Celula));
+	p1->seg = NULL;
+	
+	Celula *p2 = malloc(sizeof(Celula));
+	p2->seg = NULL;
+	
+	Celula *p3 = malloc(sizeof(Celula));
+	p3->seg = NULL;
+	
+	empilha(p1,10);
+	empilha(p1,8);
+	empilha(p1,5);
+	
+	imprimir(p1);
+	
+	transfere(p1,p2);
+	printf("\n");
+	imprimir(p2);
+	printf("\n");
+	imprimir(p1);
+	transfere(p1,p2);
 	
 	
-	A[0][1] = 1;
-	A[1][2] = 1;
-	A[2][4] = 1;
-	A[3][2] = 1;
-	A[3][4] = 1;
-	A[4][0] = 1;
-	A[5][1] = 1;
-	
-	printf("%i",A[0][0]);
-	
-	//int *resultado = malloc(n*sizeof(int));
-	//resultado = Distancias(&Matriz,n,3);
-	
-	//for(i=0;i<=5;i++) printf("\n %i",resultado[i]);
 	
 	return 0;
 }
