@@ -526,10 +526,188 @@ END;
       where liv_cod = v_liv_codigo;
       DBMS_output.put_line('Quantidade de exemplares: ' || v_quant);
   End;
+
+  Declare
+
+  V_ename emp.ename%type;
+  V_mgr emp.mgr%type;
+
+  Begin
+  Select ename into v_ename from emp where ename='JAMES';
+  IF v_ename = 'JAMES' THEN
+    v_mgr := 22;
+  END IF;
+  Dbms_output.put_line('valor de v_mgr ' || v_mgr );
+  End;
+
+  Set serveroutput on
+  ACCEPT p_n1 Prompt 'Entre com o primeiro numero: '
+  ACCEPT p_n2 Prompt 'Entre com o segundo numero: '
+
+  Declare
+
+  v_n1 number(5);
+  v_n2 number(5);
+
+  Begin
+
+  v_n1 := &p_n1;
+  v_n2 := &p_n2;
+  v_n1 := v_n1 + v_n2;
+  dbms_output.put_line('Soma = ' || v_n1);
+
+  End;
+
+
+  Set serveroutput on
+  ACCEPT p_n Prompt 'Entre com o numero: '
+
+  Declare
+
+  v_n number(5);
+
+  Begin
+
+  v_n := &p_n;
+
+  dbms_output.put_line('Numero ' || v_n);
+
+  End;
+
+
+  Set serveroutput on
+  ACCEPT p_n Prompt 'Entre com o numero: '
+
+  Declare
+
+  v_n number(5);
+
+  Begin
+
+  v_n := &p_n;
+
+  dbms_output.put_line('Resultado ' || power(v_n,2));
+
+  End;
+
+  Set serveroutput on
+  ACCEPT p_ano Prompt 'Entre com o ano: '
+
+  Declare
+
+  v_ano Date;
+
+  Begin
+
+  v_ano := to_date('&p_ano','YYYY');
+
+  dbms_output.put_line('Resultado ' || floor(months_between(sysdate,v_ano)/12));
+
+  End;
+
+  Set serveroutput on
+  ACCEPT p_n Prompt 'Entre com o numero: '
+
+  Declare
+
+  v_n number(5);
+
+  Begin
+
+  v_n := &p_n;
+
+  if (mod(v_n,2) = 0) THEN
+    dbms_output.put_line('o numero ' || v_n || ' e par');
+  else
+    dbms_output.put_line('o numero ' || v_n || ' e impar');
+  end if;
+
+  End;
+
+  Set serveroutput on
+  ACCEPT p_n1 Prompt 'Entre com o numero: '
+  ACCEPT p_n2 Prompt 'Entre com o numero: '
+  ACCEPT p_n3 Prompt 'Entre com o numero: '
+
+  Declare
+
+  v_n1 number(5);
+  v_n2 number(5);
+  v_n3 number(5);
+  v_aux number(5);
+
+  Begin
+
+  v_n1 := &p_n1;
+  v_n2 := &p_n2;
+  v_n3 := &p_n3;
+
+  if(v_n2 < v_n1) THEN
+    v_aux := v_n1;
+    v_n1 := v_n2;
+    v_n2 := v_aux;
+  end if;
+
+  if(v_n3 < v_n2) THEN
+    v_aux := v_n2;
+    v_n2 := v_n3;
+    v_n3 := v_aux;
+  end if;
+
+  if(v_n2 < v_n1) THEN
+    v_aux := v_n1;
+    v_n1 := v_n2;
+    v_n2 := v_aux;
+  end if;
+
+  dbms_output.put_line(v_n1 || ' ' || v_n2 || ' ' || v_n3);
+
+  End;
+
+
+  Set serveroutput on
+  ACCEPT p_n Prompt 'Entre com o numero: '
+
+  Declare
+  v_n number(5);
+  v_resultado number(5);
+
+  Begin
+    for i in 0..10 Loop
+      v_resultado := i*v_n;
+      dbms_output.put_line(v_n || ' X ' || i || ' = ' || v_resultado);
+    end loop;
+  End;
+
+  Set serveroutput on
+  ACCEPT p_n1 Prompt 'Entre com o numero1 : '
+  ACCEPT p_n2 Prompt 'Entre com o numero2 : '
+  ACCEPT p_escolha Prompt 'Entre com a opção desejada 1 – Divisão;  2 – resto da divisão; 3 – adição;  4 – multiplicação : '
+
+  Declare
+  v_n1 number(5);
+  v_n2 number(5);
+  v_escolha number(5);
+
+  Begin
+    v_n1 := &p_n1;
+    v_n2 := &p_n2;
+    v_escolha := &p_escolha;
+
+    case
+      when v_escolha = 1 THEN
+        dbms_output.put_line('Resposta = ' || v_n1/v_n2);
+      when v_escolha = 2 THEN
+        dbms_output.put_line('Resposta = ' || mod(v_n1,v_n2));
+        when v_escolha = 3 THEN
+          dbms_output.put_line('Resposta = ' || v_n1+v_n2);
+        when v_escolha = 4 THEN
+          dbms_output.put_line('Resposta = ' || v_n1*v_n2);
+      else
+        dbms_output.put_line('Opcao invalida');
+      end case;
+  End;
 --------------------------Bloco em desuso----------------------------------
-
-
-
 
 
 */
@@ -537,18 +715,8 @@ END;
 
 ---------------------------------Execute aqui-------------------------------
 
-Declare
 
-V_ename emp.ename%type;
-V_mgr emp.mgr%type;
 
-Begin
-Select ename into v_ename from emp where ename='JAMES';
-IF v_ename = 'JAMES' THEN
-  v_mgr := 22;
-END IF;
-Dbms_output.put_line('valor de v_mgr ' || v_mgr );
-End;
 
 
 
