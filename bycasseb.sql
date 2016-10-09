@@ -513,6 +513,19 @@ END;
   select max(edi_cod)+1 from editora;
 
   create sequence edi_cod start with 3;
+
+  SET SERVEROUTPUT ON
+  ACCEPT p_liv_codigo PROMPT 'Digite o código do livro: '
+  Declare
+  v_liv_codigo livro.liv_cod%type := &p_liv_codigo;
+  v_quant number;
+  Begin
+    select count(*)
+      into v_quant
+      from exemplar
+      where liv_cod = v_liv_codigo;
+      DBMS_output.put_line('Quantidade de exemplares: ' || v_quant);
+  End;
 --------------------------Bloco em desuso----------------------------------
 
 
@@ -523,17 +536,18 @@ END;
 
 
 ---------------------------------Execute aqui-------------------------------
-SET SERVEROUTPUT ON
-ACCEPT p_liv_codigo PROMPT 'Digite o código do livro: '
+
 Declare
-v_liv_codigo livro.liv_cod%type := &p_liv_codigo;
-v_quant number;
+
+V_ename emp.ename%type;
+V_mgr emp.mgr%type;
+
 Begin
-  select count(*)
-    into v_quant
-    from exemplar
-    where liv_cod = v_liv_codigo;
-    DBMS_output.put_line('Quantidade de exemplares: ' || v_quant);
+Select ename into v_ename from emp where ename='JAMES';
+IF v_ename = 'JAMES' THEN
+  v_mgr := 22;
+END IF;
+Dbms_output.put_line('valor de v_mgr ' || v_mgr );
 End;
 
 
