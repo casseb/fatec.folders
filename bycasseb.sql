@@ -58,6 +58,29 @@ drop sequence &SequenceName;
 select
 * from &Tabela;
 
+----------------------Tabela Principal de Teste------------------------------
+
+drop table teste;
+
+create table teste (
+  codigo number(5),
+  nome varchar2(50),
+  descricao varchar2(150),
+  constraint teste_pk primary key (codigo)
+);
+
+insert into teste
+  (codigo, nome, descricao) values
+  (1,'teste1', 'Registro de teste 1');
+
+insert into teste
+  (codigo, nome, descricao) values
+  (2,'teste2', 'Registro de teste 2');
+
+insert into teste
+  (codigo, nome, descricao) values
+  (3,'teste3', 'Registro de teste 3');
+
 ----------------------Pl SQL------------------------------------------------
 
 SET SERVEROUTPUT ON
@@ -707,13 +730,104 @@ END;
         dbms_output.put_line('Opcao invalida');
       end case;
   End;
+
 --------------------------Bloco em desuso----------------------------------
+drop table teste;
+
+create table teste (
+  codigo number(5),
+  nome varchar2(50),
+  descricao varchar2(150),
+  constraint teste_pk primary key (codigo)
+);
+
+insert into teste
+  (codigo, nome, descricao) values
+  (1,'teste1', 'Registro de teste 1');
+
+insert into teste
+  (codigo, nome, descricao) values
+  (2,'teste2', 'Registro de teste 2');
+
+insert into teste
+  (codigo, nome, descricao) values
+  (3,'teste3', 'Registro de teste 3');
 
 
-*/
 
-
+  */
 ---------------------------------Execute aqui-------------------------------
+
+------------Exercicio 1
+VARIABLE resultado VARCHAR2(30)
+DECLARE v_codigo NUMBER:=1;
+BEGIN
+Select codigo into v_codigo from teste WHERE codigo=v_codigo;
+:resultado:=(SQL%ROWCOUNT ||' Linhas encontradas');
+END;
+/
+print resultado;
+
+------------Exercício 2
+
+VARIABLE resultado VARCHAR2(30)
+DECLARE
+v_codigo teste.codigo%type := 4;
+v_nome teste.nome%type := 'teste4';
+v_descricao teste.descricao%type := 'Registro de teste 4';
+
+BEGIN
+insert into teste (codigo, nome, descricao) values
+  (v_codigo,v_nome, v_descricao);
+:resultado:=(SQL%ROWCOUNT ||' Linhas inseridas');
+END;
+/
+print resultado;
+
+-------------Exercício 3
+
+VARIABLE resultado VARCHAR2(30)
+DECLARE v_codigo NUMBER:=1;
+BEGIN
+update teste set descricao = 'Alterado' WHERE codigo=v_codigo;
+:resultado:=(SQL%ROWCOUNT ||' Linhas alteradas');
+END;
+/
+print resultado;
+
+-------------Exercício 4
+
+VARIABLE resultado VARCHAR2(30)
+DECLARE v_codigo NUMBER:=1;
+BEGIN
+Delete from teste WHERE codigo=v_codigo;
+if SQL%FOUND then
+  :resultado:=(SQL%ROWCOUNT ||'LINHAS APAGADAS');
+else
+  :resultado:=('Nenhuma linha foi apagada');
+  end if;
+END;
+/
+print resultado;
+
+-------------Exercício 5
+
+VARIABLE resultado VARCHAR2(30)
+DECLARE v_codigo NUMBER:=1;
+BEGIN
+Select codigo into v_codigo from teste WHERE codigo=v_codigo;
+if SQL%NOTFOUND then
+:resultado:=('Nenhuma linha foi encontrada');
+else
+:resultado:=(SQL%ROWCOUNT ||'LINHAS ENCONTRADAS');
+end if;
+END;
+/
+print resultado;
+
+
+
+
 
 
 
@@ -723,5 +837,5 @@ END;
 
 
 -----------------Final de arquivo e Commit implícito-------------------------
-/
+--/
 commit;
