@@ -1,6 +1,7 @@
 ----------------Comandos de inicialização-------------------------------
 connect USER_PRATICA05/aluno
 clear scr
+set serveroutput on
 /*
 ----------------Preparando Banco-----------------------------------------
 
@@ -731,7 +732,7 @@ END;
       end case;
   End;
 
---------------------------Bloco em desuso----------------------------------
+
 drop table teste;
 
 create table teste (
@@ -754,85 +755,224 @@ insert into teste
   (3,'teste3', 'Registro de teste 3');
 
 
+  ------------Exercicio 1
+  VARIABLE resultado VARCHAR2(30)
+  DECLARE v_codigo NUMBER:=1;
+  BEGIN
+  Select codigo into v_codigo from teste WHERE codigo=v_codigo;
+  :resultado:=(SQL%ROWCOUNT ||' Linhas encontradas');
+  END;
+  /
+  print resultado;
+
+  ------------Exercício 2
+
+  VARIABLE resultado VARCHAR2(30)
+  DECLARE
+  v_codigo teste.codigo%type := 4;
+  v_nome teste.nome%type := 'teste4';
+  v_descricao teste.descricao%type := 'Registro de teste 4';
+
+  BEGIN
+  insert into teste (codigo, nome, descricao) values
+    (v_codigo,v_nome, v_descricao);
+  :resultado:=(SQL%ROWCOUNT ||' Linhas inseridas');
+  END;
+  /
+  print resultado;
+
+  -------------Exercício 3
+
+  VARIABLE resultado VARCHAR2(30)
+  DECLARE v_codigo NUMBER:=1;
+  BEGIN
+  update teste set descricao = 'Alterado' WHERE codigo=v_codigo;
+  :resultado:=(SQL%ROWCOUNT ||' Linhas alteradas');
+  END;
+  /
+  print resultado;
+
+  -------------Exercício 4
+
+  VARIABLE resultado VARCHAR2(30)
+  DECLARE v_codigo NUMBER:=1;
+  BEGIN
+  Delete from teste WHERE codigo=v_codigo;
+  if SQL%FOUND then
+    :resultado:=(SQL%ROWCOUNT ||'LINHAS APAGADAS');
+  else
+    :resultado:=('Nenhuma linha foi apagada');
+    end if;
+  END;
+  /
+  print resultado;
+
+  -------------Exercício 5
+
+  VARIABLE resultado VARCHAR2(30)
+  DECLARE v_codigo NUMBER:=1;
+  BEGIN
+  Select codigo into v_codigo from teste WHERE codigo=v_codigo;
+  if SQL%NOTFOUND then
+  :resultado:=('Nenhuma linha foi encontrada');
+  else
+  :resultado:=(SQL%ROWCOUNT ||'LINHAS ENCONTRADAS');
+  end if;
+  END;
+  /
+  print resultado;
+
+  create table emp_tab
+  (empid number(10) primary key,
+  emp_nome varchar2(30),
+  sal number(10,2),
+  depid number(10));
+
+-------------------------Trigger-------------------------------------
+
+CREATE OR REPLACE TRIGGER Imp_Altera_Salarial
+BEFORE DELETE OR INSERT OR UPDATE
+ON Emp_tab
+FOR EACH ROW WHEN ( new.EmpID > 0)
+DECLARE sal_diff number ;
+BEGIN
+sal_diff :=  :new.sal - :old.sal;
+dbms_output.put_line ( 'Old salary: ' || :old.sal ) ;
+dbms_output.put_line ( ' Difference ' || sal_diff ) ;
+dbms_output.put_line ( 'New salary: ' || :new.sal ) ;
+END;
+
+
+
+CREATE OR REPLACE TRIGGER aumento_salarial
+AFTER UPDATE ON Emp_tab
+BEGIN
+INSERT INTO Emp_log (Data, Msg)
+VALUES (SYSDATE, 'Mudança em Emp_tab');
+END;
+
+insert into emp_tab (empid,emp_nome,sal,depid) values (4,'Alfafa',600.00,3);
+
+desc emp_tab
+
+update emp_tab set emp_nome = 'Alfafa Mor', sal = 615.00;
+
+select * from emp_tab;
+
+create table emp_log
+(data date, msg varchar2(50));
+
+
+
+-----------------------------Package---------------------------------------
+
+create or replace Package exemplo_package
+  is
+  procedure concatena_string (p_string1 in varchar2, p_string2 in varchar2, p_string_result out varchar2);
+
+end exemplo_package;
+
+
+
+create or replace Package body exemplo_package
+  is
+  procedure concatena_string (p_string1 in varchar2, p_string2 in varchar2, p_string_result out varchar2)
+  is
+  BEGIN
+  p_string_result := concat(p_string1,p_string2);
+  end concatena_string;
+end exemplo_package;
+
+------------------------Bloco de teste de procedure-------------------------
+
+declare
+v_varchar varchar2(50);
+v_number number(10,3);
+
+BEGIN
+-----Coloque sua procedure aqui
+exemplo_package.concatena_string('By',' Casseb',v_varchar);
+
+
+-----Retornos
+---Retorno texto
+if (v_varchar is not null) then
+  dbms_output.put_line('Retorno Varchar2 = '||v_varchar);
+end if;
+---Retorno numérico
+if (v_number is not null) then
+  dbms_output.put_line('Retorno Number = '||v_number);
+end if;
+
+End;
+
+--------------------------Bloco em desuso----------------------------------
+
+create table Empregado (
+  cpf varchar2(50),
+  nome varchar2(50),
+  depto number(5),
+  salario number(38,2)
+ );
+
+create table Departamento(
+  cod number(5),
+  nome varchar2(50),
+  total_sal number(38,2)
+);
+
+
+create or replace Trigger total_salario1
+  after insert or delete or update on Empregado
+  for each row
+  BEGIN
+
+    if inserting then
+
+      update departamento set
+      total_sal = total_sal+:new.salario
+      where cod = :new.depto;
+
+    end if;
+
+    if updating then
+
+          if (:old.salario <> :new.salario) then
+           update departamento set
+             total_sal = total_sal+(:new.salario - :old.salario)
+             where cod = :new.depto;
+          end if;
+
+           if(:old.depto <> :new.depto) then
+           update departamento set
+             total_sal = total_sal-:old.salario
+             where cod = :old.depto;
+             update departamento set
+               total_sal = total_sal+:new.salario
+               where cod = :new.depto;
+           end if;
+
+    end if;
+
+    if deleting then
+      update departamento set
+      total_sal = total_sal-:old.salario
+      where cod = :old.depto;
+    end if;
+  end;
+
+
+
+  insert into departamento (cod, nome, total_sal) values (1,'Batman', 0);
+  insert into departamento (cod, nome, total_sal) values (2,'Hulk',0);
 
   */
 ---------------------------------Execute aqui-------------------------------
 
-------------Exercicio 1
-VARIABLE resultado VARCHAR2(30)
-DECLARE v_codigo NUMBER:=1;
-BEGIN
-Select codigo into v_codigo from teste WHERE codigo=v_codigo;
-:resultado:=(SQL%ROWCOUNT ||' Linhas encontradas');
-END;
-/
-print resultado;
 
-------------Exercício 2
+delete from empregado;
 
-VARIABLE resultado VARCHAR2(30)
-DECLARE
-v_codigo teste.codigo%type := 4;
-v_nome teste.nome%type := 'teste4';
-v_descricao teste.descricao%type := 'Registro de teste 4';
-
-BEGIN
-insert into teste (codigo, nome, descricao) values
-  (v_codigo,v_nome, v_descricao);
-:resultado:=(SQL%ROWCOUNT ||' Linhas inseridas');
-END;
-/
-print resultado;
-
--------------Exercício 3
-
-VARIABLE resultado VARCHAR2(30)
-DECLARE v_codigo NUMBER:=1;
-BEGIN
-update teste set descricao = 'Alterado' WHERE codigo=v_codigo;
-:resultado:=(SQL%ROWCOUNT ||' Linhas alteradas');
-END;
-/
-print resultado;
-
--------------Exercício 4
-
-VARIABLE resultado VARCHAR2(30)
-DECLARE v_codigo NUMBER:=1;
-BEGIN
-Delete from teste WHERE codigo=v_codigo;
-if SQL%FOUND then
-  :resultado:=(SQL%ROWCOUNT ||'LINHAS APAGADAS');
-else
-  :resultado:=('Nenhuma linha foi apagada');
-  end if;
-END;
-/
-print resultado;
-
--------------Exercício 5
-
-VARIABLE resultado VARCHAR2(30)
-DECLARE v_codigo NUMBER:=1;
-BEGIN
-Select codigo into v_codigo from teste WHERE codigo=v_codigo;
-if SQL%NOTFOUND then
-:resultado:=('Nenhuma linha foi encontrada');
-else
-:resultado:=(SQL%ROWCOUNT ||'LINHAS ENCONTRADAS');
-end if;
-END;
-/
-print resultado;
-
-
-
-
-
-
-
-
-
+  select * from departamento;
 
 
 
