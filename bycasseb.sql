@@ -883,30 +883,7 @@ create or replace Package body exemplo_package
   end concatena_string;
 end exemplo_package;
 
-------------------------Bloco de teste de procedure-------------------------
 
-declare
-v_varchar varchar2(50);
-v_number number(10,3);
-
-BEGIN
------Coloque sua procedure aqui
-exemplo_package.concatena_string('By',' Casseb',v_varchar);
-
-
------Retornos
----Retorno texto
-if (v_varchar is not null) then
-  dbms_output.put_line('Retorno Varchar2 = '||v_varchar);
-end if;
----Retorno numérico
-if (v_number is not null) then
-  dbms_output.put_line('Retorno Number = '||v_number);
-end if;
-
-End;
-
---------------------------Bloco em desuso----------------------------------
 
 create table Empregado (
   cpf varchar2(50),
@@ -961,21 +938,206 @@ create or replace Trigger total_salario1
     end if;
   end;
 
+/*
 
 
-  insert into departamento (cod, nome, total_sal) values (1,'Batman', 0);
-  insert into departamento (cod, nome, total_sal) values (2,'Hulk',0);
+CREATE OR REPLACE PACKAGE JOB_PACK
+IS
 
-  */
+  PROCEDURE add_job (p_jobid    IN jobs.empno%TYPE, p_jobtitle IN jobs.job%TYPE);
+  PROCEDURE upd_job (p_jobid    IN jobs.empno%TYPE, p_jobtitle IN jobs.job%TYPE);
+  PROCEDURE del_job (p_jobid IN jobs.empno%TYPE);
+  FUNCTION q_job (p_jobid IN jobs.empno%TYPE) RETURN VARCHAR2;
+
+END JOB_PACK;
+
+
+create or replace PACKAGE BODY JOB_PACK
+IS
+
+  PROCEDURE add_job
+  (p_jobid    IN jobs.empno%TYPE,
+   p_jobtitle IN jobs.job%TYPE)
+  IS
+  BEGIN
+  INSERT INTO jobs (empno, job)
+  VALUES (p_jobid, p_jobtitle);
+  END add_job;
+
+  PROCEDURE upd_job
+  (p_jobid    IN jobs.empno%TYPE,
+   p_jobtitle IN jobs.job%TYPE)
+  IS
+    BEGIN
+    UPDATE jobs
+       SET job = p_jobtitle
+     WHERE empno = p_jobid;
+    IF SQL%NOTFOUND THEN
+    RAISE_APPLICATION_ERROR(-20202,'No job updated.');
+    END IF;
+    END upd_job;
+
+  PROCEDURE del_job
+  (p_jobid IN jobs.empno%TYPE)
+  IS
+  BEGIN
+  DELETE FROM jobs
+   WHERE empno = p_jobid;
+  IF SQL%NOTFOUND THEN
+  RAISE_APPLICATION_ERROR (-20203,'No job deleted.');
+  END IF;
+  END del_job;
+
+  FUNCTION q_job
+  (p_jobid IN jobs.empno%TYPE)
+  RETURN VARCHAR2
+  IS
+  v_jobtitle jobs.job%TYPE;
+  BEGIN
+  SELECT job
+    INTO v_jobtitle
+    FROM jobs
+   WHERE empno = p_jobid;
+  RETURN (v_jobtitle);
+  END q_job;
+
+END JOB_PACK;
+
+
+
+
+
+DROP TABLE AUTOR_MUSICA;
+DROP TABLE AUTOR;
+DROP TABLE FAIXA;
+DROP TABLE CD;
+DROP TABLE GRAVADORA;
+DROP TABLE MUSICA;
+DROP TABLE CD_CATEGORIA;
+
+CREATE TABLE AUTOR (
+       aut_codigo           NUMBER primary key,
+       aut_nome             VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE GRAVADORA (
+       grav_codigo          NUMBER PRIMARY KEY,
+       grav_nome            VARCHAR(60) NOT NULL,
+       grav_endereco        VARCHAR(60) NOT NULL,
+       grav_telefone        VARCHAR(20) NOT NULL,
+       grav_contato         VARCHAR(20) NOT NULL,
+       grav_endsite         VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE CD (
+       cd_codigo            NUMBER primary key,
+       cd_nome              VARCHAR(60) NOT NULL,
+       cd_preco_venda       NUMBER(14,2) NOT NULL,
+       cd_data_lancamento   DATE NULL,
+       grav_codigo          NUMBER,
+       cd_indicado          NUMBER
+);
+
+ALTER TABLE CD
+       ADD  ( FOREIGN KEY (cd_indicado)
+                             REFERENCES CD(cd_codigo) ) ;
+
+
+ALTER TABLE CD
+       ADD  ( FOREIGN KEY (grav_codigo)
+                             REFERENCES GRAVADORA(grav_codigo) ) ;
+
+
+CREATE TABLE CD_CATEGORIA (
+       cat_codigo           NUMBER PRIMARY KEY,
+       menor_preco          NUMBER(14,2) NOT NULL,
+       maior_preco          NUMBER(14,2) NOT NULL
+);
+
+CREATE TABLE MUSICA (
+       mus_codigo           NUMBER primary key,
+       mus_nome             VARCHAR(60) NOT NULL,
+       mus_duracao          NUMBER(6,2) NOT NULL
+);
+
+CREATE TABLE FAIXA (
+       cd_codigo            NUMBER,
+       mus_codigo           NUMBER,
+       faixa_numero         NUMBER,
+       PRIMARY KEY (cd_codigo, mus_codigo),
+       FOREIGN KEY (cd_codigo) references CD (cd_codigo),
+       FOREIGN KEY (mus_codigo) references musica (mus_codigo)
+);
+
+CREATE TABLE AUTOR_MUSICA (
+       aut_codigo           NUMBER,
+       mus_codigo           NUMBER,
+       PRIMARY KEY (aut_codigo, mus_codigo)
+);
+
+
+
+ALTER TABLE AUTOR_MUSICA
+       ADD  ( FOREIGN KEY (aut_codigo)
+                             REFERENCES AUTOR (aut_codigo) ) ;
+
+
+ALTER TABLE AUTOR_MUSICA
+       ADD  ( FOREIGN KEY (mus_codigo)
+                             REFERENCES musica(mus_codigo) ) ;
+
+ ------------------------Bloco de teste de procedure-------------------------
+
+ declare
+ v_varchar varchar2(50);
+ v_number number(10,3);
+
+ BEGIN
+ -----Coloque sua procedure aqui
+ --exemplo_package.concatena_string('By',' Casseb',v_varchar);
+ v_number := duracao_cd(1,v_number);
+
+
+ -----Retornos
+ ---Retorno texto
+ if (v_varchar is not null) then
+   dbms_output.put_line('Retorno Varchar2 = '||v_varchar);
+ end if;
+ ---Retorno numérico
+ if (v_number is not null) then
+   dbms_output.put_line('Retorno Number = '||v_number);
+ end if;
+
+ End;
+
+
+ create or replace procedure localizar_cd (p_cd_nome in out cd.cd_nome%type, r_cd_preco out cd.cd_preco_venda%type)
+   is
+   begin
+   select cd_nome, cd_preco_venda
+   into p_cd_nome, r_cd_preco
+   from cd
+   where cd_nome = p_cd_nome;
+   exception
+     when NO_DATA_FOUND then
+       dbms_output.put_line('Sem registro =-(');
+     when TOO_MANY_ROWS then
+       dbms_output.put_line('Mais de um registro');
+     when OTHERS then
+       dbms_output.put_line('Sei lá que erro que deu kkkkk');
+ end;
+
+
+--------------------------Bloco em desuso----------------------------------
+
+
+
+*/
 ---------------------------------Execute aqui-------------------------------
 
-
-delete from empregado;
-
-  select * from departamento;
 
 
 
 -----------------Final de arquivo e Commit implícito-------------------------
---/
+/
 commit;
