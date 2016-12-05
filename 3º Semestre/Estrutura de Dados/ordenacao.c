@@ -1,19 +1,18 @@
 #include <stdio.h>
 
-void shellSort(int v[], int n){
-	int i, j, aux,gap;
-	for(gap = n/2; gap>0; gap = gap/2){
-		printf("%i",gap);
-		for(i=gap;i<n;i++){
-			aux = v[i];
-			for(j=i;v[j-gap]>aux && j>0; j=j-gap){
-				v[j] = v[j-gap];
+void heapSort(int v[], int n){
+	int i, j, aux;
+	
+	for(i=n; i>0; i--){
+		for(j=i; j>0; j--){
+			if(v[j]<v[j/2]){
+				aux = v[j];
+				v[j] = v[j/2];
+				v[j/2] = aux;
 			}
-			v[j] = aux;
-			printf("\n");
 		}
-		printf("\n");
 	}
+	
 	
 	for(i=0;i<n;i++){
 		printf("\n%i",v[i]);
@@ -22,7 +21,7 @@ void shellSort(int v[], int n){
 
 int main(){
 	int n = 5;
-	int v[] = {9,7,4,16,3};
-	shellSort(v,n);
+	int v[] = {90,23,67,21,70};
+	heapSort(v,n);
 	return 0;
 }

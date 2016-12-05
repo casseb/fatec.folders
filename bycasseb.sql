@@ -1127,9 +1127,23 @@ ALTER TABLE AUTOR_MUSICA
        dbms_output.put_line('Sei lá que erro que deu kkkkk');
  end;
 
+ create table log_cd_preco (
+   data_alteracao Date,
+   usuario varchar(100),
+   preco_antigo number(14,2),
+   preco_atual number(14,2),
+   cd number
+ );
+
+ create or replace Trigger log_cd_preco
+   after update of cd_preco_venda on cd
+   for each row
+     begin
+       insert into log_cd_preco (data_alteracao, usuario, preco_antigo, preco_atual,cd) values
+         (sysdate,'casseb',:old.cd_preco_venda, :new.cd_preco_venda,:new.cd_codigo);
+     end;
 
 --------------------------Bloco em desuso----------------------------------
-
 
 
 */
@@ -1138,6 +1152,9 @@ ALTER TABLE AUTOR_MUSICA
 
 
 
------------------Final de arquivo e Commit implícito-------------------------
+
+
+-----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 /
+SHOW ERROR
 commit;
