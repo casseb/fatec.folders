@@ -1,5 +1,6 @@
 ----------------Comandos de inicialização-------------------------------
-connect USER_PRATICA05/aluno
+--connect USER_PRATICA05/aluno
+connect hr/hr
 clear scr
 set serveroutput on
 /*
@@ -48,7 +49,33 @@ where owner = '&Banco';
 
 select
 rownum, sequence_name from all_sequences
-where sequence_owner = 'JOGO';
+where sequence_owner = '&Usuario';
+
+-----------------------Consultando todas as Procedures--------------------
+
+select
+rownum, object_name from all_procedures
+where owner = '&Usuario';
+
+-----------------------Observando codigo de procedure-------------------
+
+select
+TEXT From USER_SOURCE
+Where NAME = '&Procedure' and type = 'PROCEDURE'
+Order by LINE;
+
+-----------------------Consultando todas as Triggers--------------------
+
+select
+rownum, object_name from all_triggers
+where owner = '&Usuario';
+
+-----------------------Observando codigo de procedure-------------------
+
+select
+TEXT From USER_SOURCE
+Where NAME = '&Procedure' and type = 'TRIGGER'
+Order by LINE;
 
 -----------------------Apagando Sequence--------------------------------
 
@@ -1144,17 +1171,28 @@ ALTER TABLE AUTOR_MUSICA
      end;
 
 --------------------------Bloco em desuso----------------------------------
-
+16/02/2017
+alter user hr IDENTIFIED by hr;
+alter user hr account unlock;
 
 */
 ---------------------------------Execute aqui-------------------------------
 
+select
+rownum, TRIGGER_NAME from all_triggers
+where owner = '&Usuario';
+
+
+select
+TEXT From USER_SOURCE
+Where NAME = '&Procedure' and type = 'TRIGGER'
+Order by LINE;
 
 
 
 
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
-/
-SHOW ERROR
+--/
+--SHOW ERROR
 commit;
