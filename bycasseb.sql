@@ -1,6 +1,7 @@
 ----------------Comandos de inicialização-------------------------------
 --connect USER_PRATICA05/aluno
-connect hr/hr
+--connect hr/hr
+connect system/aranha123
 clear scr
 set serveroutput on
 /*
@@ -1285,14 +1286,13 @@ Comando para Debugar
 @out
 */
 
-declare
-    begin
-      SHOW_ROWS_FOR_DEPT_STATIC_SQL(70);
-    end;
-    /
+CREATE USER USR_LAB02 IDENTIFIED BY SENHA TEMPORARY TABLESPACE TEMP DEFAULT TABLESPACE USR_LAB01;
 
-select * from employees where department_id = 70;
+GRANT INSERT, DELETE, SELECT ON USR_LAB01.XYZ2 TO USR_LAB02 WITH GRANT OPTION;
 
+grant connect to USR_lab02;
+
+  
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 --/

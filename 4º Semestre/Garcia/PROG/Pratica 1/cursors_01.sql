@@ -29,5 +29,3 @@ create or replace package body Employees_Cur_Static_Sql is
 end Employees_Cur_Static_Sql;
 /
 Show Errors
-
-

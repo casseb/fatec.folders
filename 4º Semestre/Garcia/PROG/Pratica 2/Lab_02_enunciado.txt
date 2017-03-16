@@ -1,0 +1,20 @@
+Laboratório 02 - Programação Avançada PL/SQL
+
+
+01) Documentar no relatório os elementos da package UTL_FILE utilizados no exemplo arquivo01.sql.
+
+02) Elaborar um código PL/SQL para varrer os números de 0 a 100.
+
+A cada iteração gerar um log no disco com o total atual de números pares.
+
+03) Elaborar um código PL/SQL capaz de ler o arquivo com o conteúdo a seguir e inserir numa tabela que você criará.
+
+Conteúdo do arquivo:
+JOSE FILHO;32;21/04/1984;
+ABREU SODRÉ;43;14/06/1970;
+RICARDO SIQUEIRA;21;30/10/1945;
+
+Data de entrega: até 30/03/2017
+
+
+
