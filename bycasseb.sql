@@ -1,7 +1,7 @@
 ----------------Comandos de inicialização-------------------------------
 --connect USER_PRATICA05/aluno
 --connect hr/hr
-connect system/aranha123
+connect system/aranha123 AS SYSDBA
 clear scr
 set serveroutput on
 /*
@@ -109,6 +109,16 @@ insert into teste
 insert into teste
   (codigo, nome, descricao) values
   (3,'teste3', 'Registro de teste 3');
+
+---------------------Manipulando arquivos texto----------------------------
+--Conceder permissão ao usuário
+connect system/aranha123 AS SYSDBA
+
+--Dando permissão geral para todos usarem a package utl_file
+grant execute on utl_file to public;
+
+--Criando diretório
+create directory UTL_FILE_TEST as 'E:/arquivosOracle/';
 
 ----------------------Pl SQL------------------------------------------------
 
@@ -1286,13 +1296,68 @@ Comando para Debugar
 @out
 */
 
-CREATE USER USR_LAB02 IDENTIFIED BY SENHA TEMPORARY TABLESPACE TEMP DEFAULT TABLESPACE USR_LAB01;
 
-GRANT INSERT, DELETE, SELECT ON USR_LAB01.XYZ2 TO USR_LAB02 WITH GRANT OPTION;
 
-grant connect to USR_lab02;
 
-  
+declare
+  v_line           varchar2(32767);--???????
+  c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
+  c_filename       constant varchar2(80) := 'test.txt';--Declara variável com nome do arquivo que será criado
+  v_handle         Utl_File.File_Type;--Variável objeto que manipula arquivos
+
+
+  procedure Show_Is_Open is begin--Iniciado procedure Show_Is_Open
+    case Utl_File.Is_Open ( file => v_handle )--Condicional que confere se o arquivo esta aberto para edição
+      when true then Dbms_Output.Put_Line ( 'open' );--Impressão quando ele esta aberto para edição
+      else           Dbms_Output.Put_Line ( 'closed' );--IMpressão para quando ele esta fechado
+    end case;--Fim da condicional
+
+  end Show_Is_Open;--Fim da procedure Show_Is_Open
+
+  procedure Put_Line is begin--Inicio da procedure Put_Line
+    Utl_File.Put_Line (--Chamada de put_line para adicionar conteúdo ao arquivo texto
+      file     => v_handle,--file recebe o objeto utl_File.File_type
+      buffer   => 'Hello world',--Bufferiza o conteúdo que será adicionado ao arquivo
+     autoflush => false );--
+
+  end Put_Line;
+
+begin
+
+  v_handle := Utl_File.Fopen (
+    location    => c_location,
+    filename    => c_filename,
+    open_mode   => 'w' /* write over any existing file with this name */,
+    max_linesize => 32767 );
+
+  Show_Is_Open;
+  Put_Line;
+  Utl_File.Fclose ( file => v_handle );
+
+  Show_Is_Open;
+
+exception
+  when
+    -- ORA-29287: invalid maximum line size
+    Utl_File.Invalid_Maxlinesize
+  then
+    -- Fclose_All closes all open files for this session.
+    -- It is for cleanup use only. File handles will not be cleared
+    -- (Is_Open will still indicate they are valid)
+
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Maxlinesize trapped' );
+
+  when
+    -- ORA-29282: invalid file ID
+    Utl_File.Invalid_Filehandle
+  then
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
+end;
+/
+
+
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 --/
