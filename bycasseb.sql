@@ -120,6 +120,148 @@ grant execute on utl_file to public;
 --Criando diretório
 create directory UTL_FILE_TEST as 'E:/arquivosOracle/';
 
+--Escopo de gravação em arquivo
+
+
+declare
+  v_line           varchar2(32767);--???????
+  c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
+  c_filename       constant varchar2(80) := 'test.txt';--Declara variável com nome do arquivo que será criado
+  v_handle         Utl_File.File_Type;--Variável objeto que manipula arquivos
+
+
+  procedure Show_Is_Open is begin--Iniciado procedure Show_Is_Open
+    case Utl_File.Is_Open ( file => v_handle )--Condicional que confere se o arquivo esta aberto para edição
+      when true then Dbms_Output.Put_Line ( 'open' );--Impressão quando ele esta aberto para edição
+      else           Dbms_Output.Put_Line ( 'closed' );--IMpressão para quando ele esta fechado
+    end case;--Fim da condicional
+
+  end Show_Is_Open;--Fim da procedure Show_Is_Open
+
+  procedure Put_Line is begin--Inicio da procedure Put_Line
+    Utl_File.Put_Line (--Chamada de put_line para adicionar conteúdo ao arquivo texto
+      file     => v_handle,--file recebe o objeto utl_File.File_type
+      buffer   => 'Hello world',--Bufferiza o conteúdo que será adicionado ao arquivo
+     autoflush => false );--Informa que o flush (carga dos dados no arquivo) sejam feitas manualmente
+
+  end Put_Line;--Fim da procedure put_line
+
+begin
+
+  v_handle := Utl_File.Fopen (--Inicio da abertura do arquivo para gravação
+    location    => c_location,--Define o local
+    filename    => c_filename,--define nome do arquivo
+    open_mode   => 'w', /* write over any existing file with this name
+    max_linesize => 32767 );--Tamanho máximo de linhas
+
+  Show_Is_Open;--Chama a procedure Show_Is_Open para mostrar que o arquivo esta aberto
+  Put_Line;--Exevuta a função para gravar no arquivo
+  Utl_File.Fclose ( file => v_handle );--Fecha o uso do arquivo
+
+  Show_Is_Open;--Imprime ao usuário o status do arquivo (neste caso, ele está fechado)
+
+exception--Inicio da tratativa das excessões
+  when
+    -- ORA-29287: invalid maximum line size
+    Utl_File.Invalid_Maxlinesize
+  then
+    -- Fclose_All closes all open files for this session.
+    -- It is for cleanup use only. File handles will not be cleared
+    -- (Is_Open will still indicate they are valid)
+
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Maxlinesize trapped' );
+
+  when
+    -- ORA-29282: invalid file ID
+    Utl_File.Invalid_Filehandle
+  then
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
+end;
+/
+
+--Gerando um arquivo com loop da quantidade de numeros pares
+
+
+declare
+  v_count          number(5);
+  c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
+  c_filename       constant varchar2(80) := 'test.txt';--Declara variável com nome do arquivo que será criado
+  v_handle         Utl_File.File_Type;--Variável objeto que manipula arquivos
+
+
+  procedure Show_Is_Open is begin--Iniciado procedure Show_Is_Open
+    case Utl_File.Is_Open ( file => v_handle )--Condicional que confere se o arquivo esta aberto para edição
+      when true then Dbms_Output.Put_Line ( 'open' );--Impressão quando ele esta aberto para edição
+      else           Dbms_Output.Put_Line ( 'closed' );--IMpressão para quando ele esta fechado
+    end case;--Fim da condicional
+
+  end Show_Is_Open;--Fim da procedure Show_Is_Open
+
+  procedure Put_Line is begin--Inicio da procedure Put_Line
+  v_count := 0;--iniciando a variável
+  for i in 0..100 loop--Loop para percorrer todos os numeros
+    if mod(i,2) = 0 then--Conferindo se é par
+      v_count := v_count+1;
+    end if;
+    Utl_File.Put_Line (--Chamada de put_line para adicionar conteúdo ao arquivo texto
+      file     => v_handle,--file recebe o objeto utl_File.File_type
+      buffer   => 'Total de Pares: ' || v_count,--Bufferiza o conteúdo que será adicionado ao arquivo
+     autoflush => false );--Informa que o flush (carga dos dados no arquivo) sejam feitas manualmente
+    end loop;
+  end Put_Line;--Fim da procedure put_line
+
+
+
+begin
+
+  v_handle := Utl_File.Fopen (--Inicio da abertura do arquivo para gravação
+    location    => c_location,--Define o local
+    filename    => c_filename,--define nome do arquivo
+    open_mode   => 'w', /* write over any existing file with this name
+    max_linesize => 32767 );--Tamanho máximo de linhas
+
+  Show_Is_Open;--Chama a procedure Show_Is_Open para mostrar que o arquivo esta aberto
+  Put_Line;--Exevuta a função para gravar no arquivo
+  Utl_File.Fclose ( file => v_handle );--Fecha o uso do arquivo
+
+  Show_Is_Open;--Imprime ao usuário o status do arquivo (neste caso, ele está fechado)
+
+exception--Inicio da tratativa das excessões
+  when
+    -- ORA-29287: invalid maximum line size
+    Utl_File.Invalid_Maxlinesize
+  then
+    -- Fclose_All closes all open files for this session.
+    -- It is for cleanup use only. File handles will not be cleared
+    -- (Is_Open will still indicate they are valid)
+
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Maxlinesize trapped' );
+
+  when
+    -- ORA-29282: invalid file ID
+    Utl_File.Invalid_Filehandle
+  then
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
+end;
+/
+
+Comando para Debugar
+
+@debugee
+@debugeer
+@continue
+@next
+@setbreakpoint
+@abort
+@delbreakpoint
+@into
+@out
+
+
 ----------------------Pl SQL------------------------------------------------
 
 SET SERVEROUTPUT ON
@@ -1275,87 +1417,13 @@ end;
 
 
 --------------------------Bloco em desuso----------------------------------
-select
-LINE,TEXT From USER_SOURCE
-Where NAME = 'SHOW_ROWS_FOR_DEPT_STATIC_SQL' and type = 'PROCEDURE'
-Order by LINE;
+
 
 */
 ---------------------------------Execute aqui-------------------------------
-/*
-Comando para Debugar
-
-@debugee
-@debugeer
-@continue
-@next
-@setbreakpoint
-@abort
-@delbreakpoint
-@into
-@out
-*/
 
 
 
-
-declare
-  v_line           varchar2(32767);--???????
-  c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
-  c_filename       constant varchar2(80) := 'test.txt';--Declara variável com nome do arquivo que será criado
-  v_handle         Utl_File.File_Type;--Variável objeto que manipula arquivos
-
-
-  procedure Show_Is_Open is begin--Iniciado procedure Show_Is_Open
-    case Utl_File.Is_Open ( file => v_handle )--Condicional que confere se o arquivo esta aberto para edição
-      when true then Dbms_Output.Put_Line ( 'open' );--Impressão quando ele esta aberto para edição
-      else           Dbms_Output.Put_Line ( 'closed' );--IMpressão para quando ele esta fechado
-    end case;--Fim da condicional
-
-  end Show_Is_Open;--Fim da procedure Show_Is_Open
-
-  procedure Put_Line is begin--Inicio da procedure Put_Line
-    Utl_File.Put_Line (--Chamada de put_line para adicionar conteúdo ao arquivo texto
-      file     => v_handle,--file recebe o objeto utl_File.File_type
-      buffer   => 'Hello world',--Bufferiza o conteúdo que será adicionado ao arquivo
-     autoflush => false );--
-
-  end Put_Line;
-
-begin
-
-  v_handle := Utl_File.Fopen (
-    location    => c_location,
-    filename    => c_filename,
-    open_mode   => 'w' /* write over any existing file with this name */,
-    max_linesize => 32767 );
-
-  Show_Is_Open;
-  Put_Line;
-  Utl_File.Fclose ( file => v_handle );
-
-  Show_Is_Open;
-
-exception
-  when
-    -- ORA-29287: invalid maximum line size
-    Utl_File.Invalid_Maxlinesize
-  then
-    -- Fclose_All closes all open files for this session.
-    -- It is for cleanup use only. File handles will not be cleared
-    -- (Is_Open will still indicate they are valid)
-
-    Utl_File.Fclose_All;
-    Raise_Application_Error ( -20000, 'Invalid_Maxlinesize trapped' );
-
-  when
-    -- ORA-29282: invalid file ID
-    Utl_File.Invalid_Filehandle
-  then
-    Utl_File.Fclose_All;
-    Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
-end;
-/
 
 
 
