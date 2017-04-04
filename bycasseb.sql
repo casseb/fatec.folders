@@ -1,7 +1,7 @@
 ----------------Comandos de inicialização-------------------------------
---connect USER_PRATICA05/aluno
+connect USER_PRATICA05/aluno
 --connect hr/hr
-connect system/aranha123 AS SYSDBA
+--connect system/aranha123 AS SYSDBA
 clear scr
 set serveroutput on
 /*
@@ -1417,13 +1417,86 @@ end;
 
 
 --------------------------Bloco em desuso----------------------------------
-
+create table pessoas(
+  nome varchar2(100),
+  numero number(5),
+  data Date
+);
 
 */
 ---------------------------------Execute aqui-------------------------------
 
+/*
+declare
+  v_line           varchar2(32767);
+  c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
+  c_filename       constant varchar2(80) := 'entrada.txt';--Declara variável com nome do arquivo que será criado
+  v_handle         Utl_File.File_Type;--Variável objeto que manipula arquivos
+  v_nome           varchar2(100);
+  v_numero         varchar2(100);
+  v_data           varchar2(100);
 
 
+  procedure Show_Is_Open is begin--Iniciado procedure Show_Is_Open
+    case Utl_File.Is_Open ( file => v_handle )--Condicional que confere se o arquivo esta aberto para edição
+      when true then Dbms_Output.Put_Line ( 'open' );--Impressão quando ele esta aberto para edição
+      else           Dbms_Output.Put_Line ( 'closed' );--IMpressão para quando ele esta fechado
+    end case;--Fim da condicional
+
+  end Show_Is_Open;--Fim da procedure Show_Is_Open
+
+  procedure Get_Line is begin--Inicio da procedure Get_Line
+    loop
+      Utl_File.Get_Line (v_handle,v_line);
+
+      v_nome := substr(v_line,0,instr(v_line,';')-1);
+      v_numero := substr(v_line,instr(v_line,';')+1,2);
+      v_data := substr(v_line,instr(v_line,';')+4,10);
+
+    end loop;
+  end Get_Line;--Fim da procedure put_line
+
+begin
+
+  v_handle := Utl_File.Fopen (--Inicio da abertura do arquivo para gravação
+    location    => c_location,--Define o local
+    filename    => c_filename,--define nome do arquivo
+    open_mode   => 'r', -- write over any existing file with this name
+    max_linesize => 32767 );--Tamanho máximo de linhas
+
+  Show_Is_Open;--Chama a procedure Show_Is_Open para mostrar que o arquivo esta aberto
+  Get_Line;--Executa a função para ler o arquivo
+  Utl_File.Fclose ( file => v_handle );--Fecha o uso do arquivo
+
+  Show_Is_Open;--Imprime ao usuário o status do arquivo (neste caso, ele está fechado)
+
+exception--Inicio da tratativa das excessões
+  when
+    -- ORA-29287: invalid maximum line size
+    Utl_File.Invalid_Maxlinesize
+  then
+    -- Fclose_All closes all open files for this session.
+    -- It is for cleanup use only. File handles will not be cleared
+    -- (Is_Open will still indicate they are valid)
+
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Maxlinesize trapped' );
+
+  when
+    -- ORA-29282: invalid file ID
+    Utl_File.Invalid_Filehandle
+  then
+    Utl_File.Fclose_All;
+    Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
+end;
+/
+*/
+
+create table pessoas(
+  nome varchar2(100),
+  numero number(5),
+  data Date
+);
 
 
 
