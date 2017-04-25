@@ -1,0 +1,20 @@
+﻿                                FATEC
+
+                     ADMINISTRAÇÃO DE BANCO DE DADOS
+
+         LABORATÓRIO: AUDITORIA DE BANCO DE DADOS - VIA TRIGGER
+
+A partir do modelo de dados do esquema HR, execute os itens solicitados abaixo:
+
+Cenário: Você é o DBA do sistema em execução e precisa identificar anomalias na manipulação dos dados. Para executar essa tarefa você deve criar os recursos necessários para registrar em uma trilha de auditoria as manipulações dos dados durante as transações.
+
+A ameaça que você está tentando localizar é de alguém que está alterando o próprio salário sempre na véspera da data de pagamento que é o quinto dia útil de cada mês e que após o pagamento ele volta o valor para o normal.
+
+As alterações desse tipo no período entre o primeiro dia do mês e o quinta dia útil deveriam ser proibidas, mas o invasor percebeu que não existe tal proteção e está se valendo dessa vulnerabilidade.
+
+	10) Criar um trigger capaz de registrar  a trilha de auditoria em uma tabela;
+	20) Esse registro será executado por 5 meses seguidos;
+	30) Após o quinto mês você irá acessar  os dados para montar um grafico no MS-Excel ou no Google Docs e apresentar para a sua chefia o resultado da sua investigação.
+	Esse gráfico deve ser do tipo Barra Vertical e mostrar o total de dias dos cinco meses, sendo que a cada dia de mudança deve aparecer duas barras, uma mostrando o valor antigo e outra o novo valor; 
+	
+		
