@@ -1,6 +1,6 @@
 ----------------Comandos de inicialização-------------------------------
-connect USER_PRATICA05/aluno
---connect hr/hr
+--connect USER_PRATICA05/aluno
+connect hr/hr
 --connect system/aranha123 AS SYSDBA
 clear scr
 set serveroutput on
@@ -1423,10 +1423,8 @@ create table pessoas(
   data Date
 );
 
-*/
----------------------------------Execute aqui-------------------------------
 
-/*
+
 declare
   v_line           varchar2(32767);
   c_location       constant varchar2(80) := 'UTL_FILE_TEST';--Declara uma variável com o diretório Oracle
@@ -1490,7 +1488,7 @@ exception--Inicio da tratativa das excessões
     Raise_Application_Error ( -20000, 'Invalid_Filehandle trapped' );
 end;
 /
-*/
+
 
 create table pessoas(
   nome varchar2(100),
@@ -1498,7 +1496,15 @@ create table pessoas(
   data Date
 );
 
+*/
+---------------------------------Execute aqui-------------------------------
 
+CREATE OR REPLACE TRIGGER altos_roubos
+AFTER UPDATE ON 
+BEGIN
+INSERT INTO Emp_log (Data, Msg)
+VALUES (SYSDATE, 'Mudança em Emp_tab');
+END;
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 --/
