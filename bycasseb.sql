@@ -1496,17 +1496,49 @@ create table pessoas(
   data Date
 );
 
+
+
+
+
+create table alt_salario (
+  data Date,
+  valor_anterior number(8,2),
+  valor_atual number(8,2),
+  id_empregado number(6),
+)
+
+CREATE OR REPLACE TRIGGER aud_roubos
+AFTER UPDATE of salary ON employees
+FOR EACH ROW
+
+BEGIN
+
+INSERT INTO alt_salario (data, valor_anterior, valor_atual, id_empregado)
+VALUES (SYSDATE, :old.salary, :new.salary, :new.employee_id);
+
+END;
+
+/
+
+update employees set salary = 3200 where employee_id = 181;
+update employees set salary = 10000 where employee_id = 181;
+
+
+
+
+
+
+
 */
 ---------------------------------Execute aqui-------------------------------
 
-CREATE OR REPLACE TRIGGER altos_roubos
-AFTER UPDATE ON 
-BEGIN
-INSERT INTO Emp_log (Data, Msg)
-VALUES (SYSDATE, 'Mudança em Emp_tab');
-END;
+select * from alt_salario;
+
+
+
+
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 --/
---SHOW ERROR
+SHOW ERROR
 --commit;
