@@ -1529,16 +1529,76 @@ update employees set salary = 10000 where employee_id = 181;
 
 
 
+drop table Reajuste_Salarial;
+
+CREATE GLOBAL TEMPORARY TABLE Reajuste_Salarial(
+  Job_id varchar2(10),
+  Salary number(8,2),
+  department_id number(4),
+  count_employees number(4)
+) on commit preserve rows;
+
+
+desc employees;
+
+
+
+create or replace procedure mostrarCargos
+  is
+
+    cursor emp_cu
+    is
+      select job_id, avg(salary) avg, department_id, count(employee_id) count from employees group by job_id, department_id;
+
+  Begin
+    for emp_rec in emp_cu
+      loop
+        insert into Reajuste_Salarial (Job_id, Salary, department_id, count_employees) values (emp_rec.job_id, emp_rec.avg, emp_rec.department_id, emp_rec.count);
+      end loop;
+  end;
+/
+
+EXECUTE mostrarCargos;
+
+select * from Reajuste_Salarial;
+
+
+
+
+
+
+
 */
 ---------------------------------Execute aqui-------------------------------
 
-select * from alt_salario;
+desc employees;
 
 
+
+create or replace procedure mostrarCargos
+  is
+
+    cursor emp_cu
+    is
+      select job_id, avg(salary) avg, department_id, count(employee_id) count from employees group by job_id, department_id;
+
+  Begin
+    for emp_rec in emp_cu
+      loop
+        insert into Reajuste_Salarial (Job_id, Salary, department_id, count_employees) values (emp_rec.job_id, emp_rec.avg, emp_rec.department_id, emp_rec.count);
+      end loop;
+
+
+  end;
+/
+
+EXECUTE mostrarCargos;
+
+select * from Reajuste_Salarial;
 
 
 
 -----------------Final de arquivo, Commit implícito e demonstração de erros-------------------------
 --/
 SHOW ERROR
---commit;
+commit;
