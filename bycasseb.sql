@@ -1,7 +1,7 @@
 ----------------Comandos de inicialização-------------------------------
 --connect USER_PRATICA05/aluno
 connect hr/hr
---connect system/aranha123 AS SYSDBA
+--connect system/1234 AS SYSDBA
 clear scr
 set serveroutput on
 /*
@@ -1563,14 +1563,6 @@ EXECUTE mostrarCargos;
 select * from Reajuste_Salarial;
 
 
-
-
-
-
-
-*/
----------------------------------Execute aqui-------------------------------
-
 desc employees;
 
 
@@ -1594,7 +1586,13 @@ create or replace procedure mostrarCargos
 
 EXECUTE mostrarCargos;
 
-select * from Reajuste_Salarial;
+
+
+
+*/
+---------------------------------Execute aqui-------------------------------
+
+select * from alt_salario;
 
 
 
